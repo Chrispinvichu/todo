@@ -122,17 +122,44 @@ class _Todo_AppState extends State<Todo_App> {
   }
   void _deleteItem(int id) async{
     await Sql_helper.deleteItem(id);
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Successfully deleted a journal!'),
-    ));
-    _refreshJournals();
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('ALERT'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Delete this reminder'),
+                Text('Click yes to delete?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('YES'),
+              onPressed: () {
+                setState(() {
+                  Sql_helper.deleteItem(id);
+                  _refreshJournals();
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+    // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //   content: Text('Successfully deleted a journal!')
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Kindacode.com',
+        title: const Text('MyReminder',
           style: TextStyle(
               fontFamily: "Fasthand"
           ),),
@@ -144,7 +171,7 @@ class _Todo_AppState extends State<Todo_App> {
           : ListView.builder(
         itemCount: _journals.length,
         itemBuilder: (context, index) => Card(
-          color: Colors.blue[200],
+          color: Colors.white24,
 
           margin: const EdgeInsets.all(15),
           child: ListTile(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/splash.dart';
 import 'package:todo/sql_helper.dart';
 import 'package:todo/todo_page.dart';
 main()
@@ -11,7 +12,12 @@ class ToDo_App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
-      home: Todo_App()
+        debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.purple
+
+      ),
+      home: SplashScreen()
     );
   }
 }
